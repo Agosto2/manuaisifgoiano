@@ -1,0 +1,22 @@
+{
+  "name": "Helios",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "../docker-compose.override.yml"
+  ],
+  "service": "django",
+  "workspaceFolder": "/workspace",
+  "settings": {
+    "files.eol": "\n",
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.pythonPath": "/opt/venv/bin/python",
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "eamodio.gitlens",
+    "jeff-hykin.code-eol",
+    "ms-python.python",
+    "visualstudioexptteam.vscodeintellicode"
+  ]
+}

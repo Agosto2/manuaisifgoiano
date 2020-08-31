@@ -35,7 +35,7 @@ default:
     # Atenção: esses comandos devem ser executados com o usuário `gitlab-runner`.
     - eval $(ssh-agent -s)
     - ssh-add ~/.ssh/id_rsa_builder
-    - echo -n $CI_SUAP_DEPLOY_TOKEN | docker login -u $CI_SUAP_DEPLOY_USER --password-stdin $CI_REGISTRY
+    - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
     - shopt -s expand_aliases
     # A instalação padrão do `docker-compose` não tem as permissões necessárias
     # para acessar o diretório `/tmp` do host. Por esse motivo, definimos um `alias`

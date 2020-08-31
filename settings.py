@@ -61,7 +61,11 @@ SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'helios'
+        'NAME': 'helios',
+        "USER": 'helios',
+        "PASSWORD": 'localpassword',
+        "HOST": 'db',
+        "PORT": '5432',
     }
 }
 

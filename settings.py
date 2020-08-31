@@ -9,6 +9,9 @@ from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 import sys
 TESTING = 'test' in sys.argv
 
+from docker_utils import get_secret
+
+
 # go through environment variables and override them
 def get_from_env(var, default):
     if not TESTING and os.environ.has_key(var):
@@ -28,7 +31,10 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')
+SECRET_KEY = 'replaceme'
+if get_from_env('DJANGO_SECRET_KEY_FILE', False):
+    SECRET_KEY = get_secret(get_from_env('DJANGO_SECRET_KEY_FILE', ''))
+
 ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
@@ -62,9 +68,10 @@ DATABASES = {
 SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # override if we have an env variable
-if get_from_env('DATABASE_URL', None):
+if get_from_env('DATABASE_URL_FILE', False):
     import dj_database_url
-    DATABASES['default'] =  dj_database_url.config()
+    DATABASE_URL = get_secret(get_from_env('DATABASE_URL_FILE', ''))
+    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
     DATABASES['default']['CONN_MAX_AGE'] = 600
 
@@ -288,7 +295,10 @@ CLEVER_CLIENT_SECRET = get_from_env('CLEVER_CLIENT_SECRET', "")
 EMAIL_HOST = get_from_env('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(get_from_env('EMAIL_PORT', "2525"))
 EMAIL_HOST_USER = get_from_env('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_PASSWORD = ''
+if get_from_env('EMAIL_HOST_PASSWORD_FILE', False):
+    EMAIL_HOST_PASSWORD = get_secret(get_from_env('EMAIL_HOST_PASSWORD_FILE', ''))
+
 EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '0') == '1')
 
 # to use AWS Simple Email Service
@@ -320,10 +330,14 @@ TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 # this effectively does CELERY_ALWAYS_EAGER = True
 
 # see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
-AUTH_LDAP_SERVER_URI = "ldap://ldap.forumsys.com" # replace by your Ldap URI
-AUTH_LDAP_BIND_DN = "cn=read-only-admin,dc=example,dc=com"
-AUTH_LDAP_BIND_PASSWORD = "password"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=example,dc=com",
+AUTH_LDAP_SERVER_URI = get_from_env('AUTH_LDAP_SERVER_URI', 'ldap://ldaphomologacaodsi.ifsp.edu.br:389')
+AUTH_LDAP_BIND_DN = 'cn=root,dc=ifsp,dc=edu,dc=br'
+
+AUTH_LDAP_BIND_PASSWORD = ''
+if get_from_env('LDAP_PASSWORD_FILE', False):
+    AUTH_LDAP_BIND_PASSWORD = get_secret(get_from_env('LDAP_PASSWORD_FILE', ''))
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch('ou=servidores,dc=ifsp,dc=edu,dc=br',
     ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 

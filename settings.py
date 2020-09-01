@@ -43,6 +43,7 @@ ROOT_PATH = os.path.dirname(__file__)
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
 ADMINS = (
+    'DIR', 'infra@ifsp.edu.br'
 )
 
 MANAGERS = ADMINS
@@ -56,7 +57,7 @@ SHOW_LOGIN_OPTIONS = (get_from_env('SHOW_LOGIN_OPTIONS', '1') == '1')
 
 # sometimes, when the site is not that social, it's not helpful
 # to display who created the election
-SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
+SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '0') == '1')
 
 DATABASES = {
     'default': {
@@ -132,7 +133,7 @@ STATICFILES_DIRS = (
 
 
 # Secure Stuff
-if (get_from_env('SSL', '0') == '1'):
+if (get_from_env('SSL', '1') == '1'):
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
 
@@ -216,7 +217,7 @@ VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
 
 
 # Change your email settings
-DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'heliosvoting.pt@gmail.com')
+DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'noreply.report@ifsp.edu.br')
 DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
 SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
 
@@ -243,13 +244,13 @@ FOOTER_LOGO_URL = get_from_env('FOOTER_LOGO_URL', None)
 
 WELCOME_MESSAGE = get_from_env('WELCOME_MESSAGE', _('Welcome to IFSP E-Voting System'))
 
-HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'shirlei@gmail.com')
+HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'noreply.report@ifsp.edu.br')
 
 AUTH_TEMPLATE_BASE = "server_ui/templates/base.html"
 HELIOS_TEMPLATE_BASE = "server_ui/templates/base.html"
 AUTH_TEMPLATE_BASENONAV = "server_ui/templates/basenonav.html"
 HELIOS_TEMPLATE_BASENONAV = "server_ui/templates/basenonav.html"
-HELIOS_ADMIN_ONLY = False
+HELIOS_ADMIN_ONLY = True
 HELIOS_VOTERS_UPLOAD = True
 HELIOS_VOTERS_EMAIL = True
 
@@ -303,7 +304,7 @@ EMAIL_HOST_PASSWORD = ''
 if get_from_env('EMAIL_HOST_PASSWORD_FILE', False):
     EMAIL_HOST_PASSWORD = get_secret(get_from_env('EMAIL_HOST_PASSWORD_FILE', ''))
 
-EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '0') == '1')
+EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '1') == '1')
 
 # to use AWS Simple Email Service
 # in which case environment should contain

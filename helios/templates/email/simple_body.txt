@@ -27,6 +27,6 @@ Autentique-se com sua conta de usuário {{voter.voter_type}}.
 <br>
 <font style="" size="1" face="verdana, sans-serif">R. Pedro Vicente, 625 - Canindé, São Paulo - SP, 01109-010</font>
 <br>
-<u><a href="http://www.ifsc.edu.br" target="_blank" style=""><font style="" face="verdana, sans-serif">www.ifsc.edu.br</font></a></u>
+<u><a href="http://www.ifsp.edu.br" target="_blank" style=""><font style="" face="verdana, sans-serif">www.ifsp.edu.br</font></a></u>
 </body>
 </html>

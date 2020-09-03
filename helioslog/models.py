@@ -41,3 +41,7 @@ class HeliosLog(models.Model):
             return_val += "<li>%s : %s </li>" % (key, self.description[key])
             return_val += "</ul>"
         return return_val
+
+    def save(self, *args, **kwargs):
+        self.ip = self.ip.split(",")[0].strip()
+        return super(HeliosLog, self).save(*args, **kwargs)

@@ -58,7 +58,7 @@ publish prod image:
   <<: *tags
   stage: deploy
   script:
-    - sha256sum */**/*.py | sha256sum 2>&1 | tee SHA256SUMS.txt
+    - sh sha256sum.sh
     - docker build --target production -f Dockerfile -t $WEBAPP_TAG:$CI_COMMIT_TAG . --build-arg BUILDKIT_INLINE_CACHE=1
     - docker push $WEBAPP_TAG:$CI_COMMIT_TAG
   only:

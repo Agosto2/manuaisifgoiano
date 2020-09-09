@@ -342,7 +342,7 @@ AUTH_LDAP_BIND_PASSWORD = ''
 if get_from_env('LDAP_PASSWORD_FILE', False):
     AUTH_LDAP_BIND_PASSWORD = get_secret(get_from_env('LDAP_PASSWORD_FILE', ''))
 
-AUTH_LDAP_USER_SEARCH = LDAPSearch('ou=servidores,dc=ifsp,dc=edu,dc=br',
+AUTH_LDAP_USER_SEARCH = LDAPSearch('dc=ifsp,dc=edu,dc=br',
     ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 

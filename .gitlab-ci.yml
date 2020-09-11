@@ -45,7 +45,7 @@ default:
 
 variables:
   WEBAPP_TAG: $CI_REGISTRY_IMAGE/app
-  WEBSERVER_TAG: $CI_REGISTRY_IMAGE/nginx
+  WEBSERVER_TAG: $CI_REGISTRY_IMAGE/httpd
 
 stages:
   - deploy

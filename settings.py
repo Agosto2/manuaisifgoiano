@@ -117,15 +117,6 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = ROOT_PATH + '/sitestatic'
 
-STATICFILES_DIRS = (
-    ROOT_PATH + '/heliosbooth',
-    ROOT_PATH + '/heliosverifier',
-    ROOT_PATH + '/helios_auth/media',
-    ROOT_PATH + '/helios/media',
-    ROOT_PATH + '/server_ui/media',
-    ROOT_PATH + '/heliosinstitution/media/',
-)
-
 
 # If debug is set to false and ALLOWED_HOSTS is not declared, django raises  "CommandError: You must set settings.ALLOWED_HOSTS if DEBUG is False."
 # If in production, you got a bad request (400) error

@@ -742,7 +742,7 @@ class VoterFile(models.Model):
       if len(voter_fields) < 1:
         continue
     
-      return_dict = {'voter_id': voter_fields[0].strip()}
+      return_dict = {'voter_id': voter_fields[0].strip().lower()}
 
       if len(voter_fields) > 1:
         return_dict['email'] = voter_fields[1].strip()

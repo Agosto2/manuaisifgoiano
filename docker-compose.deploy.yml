@@ -1,0 +1,133 @@
+version: "3.7"
+
+x-default-placement: &default-placement
+  placement:
+    constraints:
+      - node.role == worker
+      - node.labels.br.edu.ifsp.environment == ${ENVIRONMENT:?Environment is required}
+
+services:
+  django:
+    image: gitlab.ifsp.edu.br:4567/ti/helios-voting/app:${VERSION:?Version is required}
+    command: bash -c "gunicorn wsgi --log-level=debug --log-file=- --worker-class=sync --workers=4 --worker-tmp-dir=/dev/shm --bind 0.0.0.0:5000 --chdir=/workspace"
+    deploy:
+      <<: *default-placement
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_django.rule=Host(`${DOMAIN_NAME}`)"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_django.entrypoints=web"
+        - "traefik.http.services.helios_${ENVIRONMENT}_django.loadbalancer.server.port=5000"
+      replicas: 4
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 512M
+        reservations:
+          cpus: "0.125"
+          memory: 256M
+    environment:
+      DEBUG: 0
+      ALLOWED_HOSTS:
+      URL_HOST:
+      DJANGO_SECRET_KEY_FILE: /run/secrets/django_secret_key
+      DJANGO_SETTINGS_MODULE: settings
+      DOMAIN_NAME: ${DOMAIN_NAME:?Domain name is required}
+      EMAIL_HOST:
+      EMAIL_PORT:
+      EMAIL_HOST_USER:
+      EMAIL_HOST_PASSWORD_FILE: /run/secrets/email_password
+      EMAIL_USE_TLS:
+      EMAIL_USE_SSL:
+      EMAIL_NOREPLY_ADDRESS:
+      ENVIRONMENT: ${ENVIRONMENT:?Environment is required}
+      DATABASE_URL_FILE: /run/secrets/database_url
+      LDAP_PASSWORD_FILE: /run/secrets/ldap_password
+      AUTH_LDAP_SERVER_URI:
+    networks:
+      - traefik_network
+      - internal
+    secrets:
+      - django_secret_key
+      - email_password
+      - database_url
+      - ldap_password
+
+  celery:
+    image: gitlab.ifsp.edu.br:4567/ti/helios-voting/app:${VERSION:?Version is required}
+    command: celery -A helios.celery_app worker --events -l INFO --concurrency=4
+    deploy:
+      <<: *default-placement
+      replicas: 4
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 512M
+        reservations:
+          cpus: "0.125"
+          memory: 256M
+    environment:
+      C_FORCE_ROOT: "yes"
+      DEBUG: 0
+      ALLOWED_HOSTS:
+      URL_HOST:
+      DJANGO_SECRET_KEY_FILE: /run/secrets/django_secret_key
+      DJANGO_SETTINGS_MODULE: settings
+      DOMAIN_NAME: ${DOMAIN_NAME:?Domain name is required}
+      EMAIL_HOST:
+      EMAIL_PORT:
+      EMAIL_HOST_USER:
+      EMAIL_HOST_PASSWORD_FILE: /run/secrets/email_password
+      EMAIL_USE_TLS:
+      EMAIL_USE_SSL:
+      EMAIL_NOREPLY_ADDRESS:
+      ENVIRONMENT: ${ENVIRONMENT:?Environment is required}
+      DATABASE_URL_FILE: /run/secrets/database_url
+      LDAP_PASSWORD_FILE: /run/secrets/ldap_password
+      AUTH_LDAP_SERVER_URI:
+    networks:
+      - traefik_network
+      - internal
+    secrets:
+      - django_secret_key
+      - email_password
+      - database_url
+      - ldap_password
+
+  httpd:
+    image: gitlab.ifsp.edu.br:4567/ti/helios-voting/httpd:${VERSION:?Version is required}
+    networks:
+      - traefik_network
+      - internal
+    deploy:
+      <<: *default-placement
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_httpd.rule=Host(`${DOMAIN_NAME}`) && (PathPrefix(`/media/`) || PathPrefix(`/static/`) || PathPrefix(`/booth/`) || PathPrefix(`/verifier/`))"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_httpd.entrypoints=web"
+        - "traefik.http.services.helios_${ENVIRONMENT}_httpd.loadbalancer.server.port=80"
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: 250M
+        reservations:
+          cpus: "0.25"
+          memory: 50M
+
+networks:
+  traefik_network:
+    external: true
+  internal:
+
+secrets:
+  django_secret_key:
+    external: true
+    name: helios_${ENVIRONMENT}_django_secret_key_v1
+  email_password:
+    external: true
+    name: helios_staging_email_password_v1
+  database_url:
+    external: true
+    name: helios_${ENVIRONMENT}_database_url_v1
+  ldap_password:
+    external: true
+    name: helios_staging_ldap_password_v1

@@ -45,6 +45,7 @@ default:
 
 variables:
   WEBAPP_TAG: $CI_REGISTRY_IMAGE/app
+  WEBSERVER_TAG: $CI_REGISTRY_IMAGE/nginx
 
 stages:
   - deploy
@@ -61,5 +62,7 @@ publish prod image:
     - sh sha256sum.sh
     - docker build --target production -f Dockerfile -t $WEBAPP_TAG:$CI_COMMIT_TAG . --build-arg BUILDKIT_INLINE_CACHE=1
     - docker push $WEBAPP_TAG:$CI_COMMIT_TAG
+    - docker build -f nginx/Dockerfile -t $WEBSERVER_TAG:$CI_COMMIT_TAG . --build-arg BUILDKIT_INLINE_CACHE=1
+    - docker push $WEBSERVER_TAG:$CI_COMMIT_TAG
   only:
     - tags

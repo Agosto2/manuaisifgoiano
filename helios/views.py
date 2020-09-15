@@ -149,7 +149,7 @@ def castvote_shortcut(request, vote_tinyhash):
   try:
     cast_vote = CastVote.objects.get(vote_tinyhash = vote_tinyhash)
   except CastVote.DoesNotExist:
-    raise Http404
+    return render_template(request, 'castvote', {'not_found' : True, 'vote_tinyhash': vote_tinyhash})
 
   return _castvote_shortcut_by_election(request, election_uuid = cast_vote.voter.election.uuid, cast_vote=cast_vote)
 

@@ -1,7 +1,10 @@
 {% extends TEMPLATE_BASE %}
 {% load i18n %}
-{% block title %}{{cast_vote.vote_tinyhash}} &mdash; {{election.name}}{% endblock %}
+{% block title %}{% firstof cast_vote.vote_tinyhash vote_tinyhash %} &mdash; {{election.name|default:"Não encontrado"}}{% endblock %}
 {% block content %}
+{% if not_found %}
+<h2 class="title">Voto não encontrado.</h2>
+{% else %}
 <h2 class="title">{% trans "Cast Vote" %} {{cast_vote.vote_tinyhash}}</h2>
 {% trans "cast in" %} <a href="{% url "helios.views.one_election_view" election.uuid %}">{{election.name}}</a><br />
 {% trans "Fingerprint: " %}<tt>{{cast_vote.vote_hash}}</tt><br />
@@ -10,6 +13,7 @@ by <b><u>
 {{the_voter.alias}}
 {% else %}
 {{the_voter.name}}
+{% endif %}
 {% endif %}
 </u></b>
 <br /><br />

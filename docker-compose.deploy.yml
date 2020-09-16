@@ -17,6 +17,11 @@ services:
         - "traefik.http.routers.helios_${ENVIRONMENT}_django.rule=Host(`${DOMAIN_NAME}`)"
         - "traefik.http.routers.helios_${ENVIRONMENT}_django.entrypoints=web"
         - "traefik.http.services.helios_${ENVIRONMENT}_django.loadbalancer.server.port=5000"
+        - "traefik.http.middlewares.helios_ratelimit.ratelimit.average=2"
+        - "traefik.http.middlewares.helios_ratelimit.ratelimit.burst=4"
+        - "traefik.http.middlewares.helios_ratelimit.ratelimit.period=1s"
+        - "traefik.http.middlewares.helios_ratelimit.ratelimit.sourcecriterion.ipstrategy.depth=2"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_django.middlewares=helios_ratelimit@docker"
       replicas: 4
       resources:
         limits:

@@ -3,15 +3,7 @@ from django.conf.urls import patterns, include
 
 from views import *
 
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    print "HTTP_X_FORWARDED_FOR: {}".format(x_forwarded_for)
-    return "HTTP_X_FORWARDED_FOR: {}".format(x_forwarded_for)
-
-
 urlpatterns = patterns('',
-  (r'^teste-proxy$', get_client_ip),
   (r'^autologin$', admin_autologin),
   (r'^testcookie$', test_cookie),
   (r'^testcookie_2$', test_cookie_2),

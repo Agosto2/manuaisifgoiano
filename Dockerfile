@@ -54,6 +54,7 @@ RUN apt-get -qy update \
     postgresql-client=11+200+deb10u3 \
     locales=2.28-10 \
     locales-all=2.28-10 \
+    traceroute=1:2.1.0-2 \
     # Remove arquivos temporários
     && apt-get autoremove -y \
     && apt-get clean -y \

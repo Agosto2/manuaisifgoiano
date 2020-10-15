@@ -278,7 +278,7 @@ class Election(HeliosModel):
     # random_filename = str(uuid.uuid4())
     # new_voter_file.voter_file.save(random_filename, uploaded_file)
 
-    new_voter_file = VoterFile(election = self, voter_file_content = uploaded_file.read())
+    new_voter_file = VoterFile(election = self, voter_file_content = uploaded_file.read().decode('utf-8-sig').encode('utf-8'))
     new_voter_file.save()
     
     self.append_log(ElectionLog.VOTER_FILE_ADDED)

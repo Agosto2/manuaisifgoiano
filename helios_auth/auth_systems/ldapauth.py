@@ -50,8 +50,6 @@ def ldap_login_view(request):
     from helios_auth.view_utils import render_template
     from helios_auth.views import after
 
-    error = None
-
     if request.method == "GET":
             form = LoginForm()
     else:
@@ -77,11 +75,10 @@ def ldap_login_view(request):
                     }
                     return HttpResponseRedirect(reverse(after))
                 else:
-                    error = 'Bad Username or Password'
+                    form.add_error(None, 'Usuário e/ou senha inválido.')
 
     return render_template(request, 'ldapauth/login', {
             'form': form,
-            'error': error,
             'enabled_auth_systems': settings.AUTH_ENABLED_AUTH_SYSTEMS,
         })
 

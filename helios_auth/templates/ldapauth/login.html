@@ -5,7 +5,9 @@
 <div class="row">
  <div class="col-md-6 col-sm-12">
 	<form class="form" role="form" action="" method="POST" id="login_form">
-	{{ form.non_field_errors }}
+	{% for error in form.non_field_errors %}
+		{{ error }}
+	{% endfor %}
 	<input type="hidden" name="csrf_token" value="{{csrf_token}}" />
 		<div class="form-group {% if form.username.errors %}has-error{% endif %}">
 		<label for="username">{% trans "Username" %}</label>

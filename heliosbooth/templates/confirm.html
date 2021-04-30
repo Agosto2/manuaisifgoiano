@@ -10,7 +10,8 @@
 {#if $T.choices[$T.question$index].length < $T.question.max}
 <!--[you under-voted: you may select up to {$T.question.max}] -->
 
-[você não votou corretamente: você precisa selecionar até {$T.question.max} opção ou opções.]
+
+[Você não votou no máximo de opções possíveis ({$T.question.max}). Clique no link alterar para escolher mais opções, ou acione o botão "Próximo Passo" para prosseguir.]
 {#/if}
 &nbsp;&nbsp;&nbsp;
 [<a onclick="BOOTH.show_question({$T.question$index}); return false;" href="#">alterar</a>]

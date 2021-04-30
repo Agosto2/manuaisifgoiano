@@ -10,11 +10,11 @@ ENV DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 # Instala os pacotes necessários para a construção das dependências
 RUN apt-get -qy update \
     && apt-get -y install --no-install-recommends \
-    apt-utils=1.8.2.1 \
+    apt-utils=1.8.2.3 \
     dialog=1.3-20190211-1 2>&1 \
     build-essential=12.6 \
     libsasl2-dev=2.1.27+dfsg-1+deb10u1 \
-    libldap2-dev=2.4.47+dfsg-3+deb10u2
+    libldap2-dev=2.4.47+dfsg-3+deb10u6
 
 COPY requirements.txt /tmp/pip-tmp/requirements.txt
 
@@ -46,12 +46,12 @@ RUN echo "tzdata tzdata/Areas select America" > /tmp/preseed.txt; \
 # Configura o apt e instala pacotes
 RUN apt-get -qy update \
     && apt-get -y install --no-install-recommends \
-    apt-utils=1.8.2.1 \
+    apt-utils=1.8.2.3 \
     dialog=1.3-20190211-1 2>&1 \
     gettext=0.19.8.1-9 \
     libsasl2-2=2.1.27+dfsg-1+deb10u1 \
-    libldap-2.4-2=2.4.47+dfsg-3+deb10u2 \
-    postgresql-client=11+200+deb10u3 \
+    libldap-2.4-2=2.4.47+dfsg-3+deb10u6 \
+    postgresql-client=11+200+deb10u4 \
     locales=2.28-10 \
     locales-all=2.28-10 \
     traceroute=1:2.1.0-2 \

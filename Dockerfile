@@ -79,7 +79,7 @@ RUN apt-get update \
     # Verifica se o git, ferramentas de processo e lsb-release estão instalados
     && apt-get -y install --no-install-recommends \
     git=1:2.20.1-2+deb10u3 \
-    iproute2=4.20.0-2 \
+    iproute2=4.20.0-2+deb10u1 \
     procps=2:3.3.15-2 \
     lsb-release=10.2019051400 \
     openssh-client=1:7.9p1-10+deb10u2 \

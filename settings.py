@@ -42,9 +42,7 @@ ROOT_PATH = os.path.dirname(__file__)
 # add admins of the form: 
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
-ADMINS = (
-    'DIR', 'infra@ifsp.edu.br'
-)
+ADMINS = get_from_env('ADMINS', 'DIR,infra@ifsp.edu.br').split(',')
 
 MANAGERS = ADMINS
 
@@ -336,20 +334,21 @@ TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 
 # see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
 AUTH_LDAP_SERVER_URI = get_from_env('AUTH_LDAP_SERVER_URI', 'ldap://ldaphomologacaodsi.ifsp.edu.br:389')
-AUTH_LDAP_BIND_DN = 'cn=root,dc=ifsp,dc=edu,dc=br'
+AUTH_LDAP_BIND_DN = get_from_env('AUTH_LDAP_BIND_DN', 'cn=root,dc=ifsp,dc=edu,dc=br')
 
 AUTH_LDAP_BIND_PASSWORD = ''
 if get_from_env('LDAP_PASSWORD_FILE', False):
     AUTH_LDAP_BIND_PASSWORD = get_secret(get_from_env('LDAP_PASSWORD_FILE', ''))
 
-AUTH_LDAP_USER_SEARCH = LDAPSearch('dc=ifsp,dc=edu,dc=br',
-    ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
-)
+AUTH_LDAP_USER_SEARCH_BASE_DN = get_from_env('AUTH_LDAP_USER_SEARCH_BASE_DN', 'dc=ifsp,dc=edu,dc=br')
+AUTH_LDAP_USER_SEARCH_FILTER = get_from_env('AUTH_LDAP_USER_SEARCH_FILTER', '(uid=%(user)s)')
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch(AUTH_LDAP_USER_SEARCH_BASE_DN, ldap.SCOPE_SUBTREE, AUTH_LDAP_USER_SEARCH_FILTER)
 
 AUTH_LDAP_USER_ATTR_MAP = {
-    "first_name": "givenName",
-    "last_name": "sn",
-    "email": "mail",
+    "first_name": get_from_env('AUTH_LDAP_USER_ATTR_FIRST_NAME', 'givenName'),
+    "last_name": get_from_env('UTH_LDAP_USER_ATTR_LAST_NAME', 'sn'),
+    "email": get_from_env('UTH_LDAP_USER_ATTR_EMAIL', 'mail'),
 }
 
 AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True

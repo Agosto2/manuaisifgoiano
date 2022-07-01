@@ -18,8 +18,7 @@ services:
         - "traefik.http.routers.helios_${ENVIRONMENT}_django.entrypoints=web"
         - "traefik.http.services.helios_${ENVIRONMENT}_django.loadbalancer.server.port=5000"
         # esse middleware DEVE SER DESABILITADO em produção
-        - "traefik.http.middlewares.helios_auth.basicauth.users=${DIGESTUSERS}"
-        - "traefik.http.routers.helios_${ENVIRONMENT}_django.middlewares=helios_auth@docker"
+        - "traefik.http.routers.helios_${ENVIRONMENT}_django.middlewares=restricted_internal_users@docker"
       replicas: 4
       resources:
         limits:
